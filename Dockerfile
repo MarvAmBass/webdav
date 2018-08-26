@@ -14,8 +14,12 @@ FROM alpine:latest
 COPY webdav.conf /etc/webdav.conf
 COPY --from=builder /go/src/github.com/MarvAmBass/webdav/cmd/webdav/webdav /bin/webdav
 
-RUN mkdir /shares
+RUN mkdir /shares \
+ && echo "#!/bin/sh" > /bin/entrypoint.sh \
+ && echo 'echo "$USER_CONFIG" >> /etc/webdav.conf' >> /bin/entrypoint.sh \
+ && echo "exec /bin/webdav --config /etc/webdav.conf" >> /bin/entrypoint.sh \
+ && chmod a+x /bin/entrypoint.sh
 
 EXPOSE 8080
 
-ENTRYPOINT ["/bin/webdav", "--config", "/etc/webdav.conf"]
+ENTRYPOINT ["/bin/entrypoint.sh"]
