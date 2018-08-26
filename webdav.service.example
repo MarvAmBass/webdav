@@ -5,7 +5,7 @@ After=network.target
 [Service]
 Type=simple
 User=root
-ExecStart=/usr/bin/webdav --config /opt/webdav.config
+ExecStart=/usr/bin/webdav --config /opt/webdav.conf
 Restart=on-failure
 
 [Install]
